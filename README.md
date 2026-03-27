@@ -11,10 +11,10 @@ By [bryanthaboi](https://github.com/bryanthaboi).
 ## Install
 
 ```bash
-npm install -g readthey
+pnpm add -g readthey
 ```
 
-You can also install with **pnpm** or **yarn** if you already use those.
+You can also use **`npm install -g readthey`** or **yarn** if you prefer.
 
 ## Open a document
 
@@ -57,7 +57,7 @@ Everything is served at **`http://127.0.0.1:34206`** on your computer—nothing 
 
 ## Optional: script line for `package.json`
 
-If you like npm scripts, this prints a ready-made line you can paste into `"scripts"`:
+If you like `package.json` scripts, this prints a ready-made line you can paste into `"scripts"`:
 
 ```bash
 readthey --command ./docs/guide.md

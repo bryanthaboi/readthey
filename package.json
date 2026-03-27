@@ -2,6 +2,7 @@
   "name": "readthey",
   "version": "0.1.0",
   "description": "Lightweight Markdown viewer with Mermaid — opens in your browser.",
+  "packageManager": "pnpm@10.31.0",
   "type": "module",
   "bin": {
     "readthey": "dist/cli.js",
@@ -17,8 +18,8 @@
   "scripts": {
     "build:viewer": "vite build",
     "build:cli": "tsc -p tsconfig.cli.json && node scripts/copy-assets.mjs",
-    "build": "npm run build:viewer && npm run build:cli",
-    "prepublishOnly": "npm run build"
+    "build": "pnpm run build:viewer && pnpm run build:cli",
+    "prepublishOnly": "pnpm run build"
   },
   "keywords": [
     "markdown",
@@ -32,6 +33,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bryanthaboi/readthey.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "engines": {
     "node": ">=18"
