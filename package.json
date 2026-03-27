@@ -1,0 +1,50 @@
+{
+  "name": "readthey",
+  "version": "0.1.0",
+  "description": "Lightweight Markdown viewer with Mermaid — opens in your browser.",
+  "type": "module",
+  "bin": {
+    "readthey": "./dist/cli.js",
+    "rt": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "logo.png",
+    "asciilogo.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build:viewer": "vite build",
+    "build:cli": "tsc -p tsconfig.cli.json && node scripts/copy-assets.mjs",
+    "build": "npm run build:viewer && npm run build:cli",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "markdown",
+    "mermaid",
+    "readme",
+    "cli",
+    "viewer"
+  ],
+  "author": "bryanthaboi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bryanthaboi/readthey.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cac": "^6.7.14",
+    "open": "^10.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "marked": "^15.0.4",
+    "mermaid": "^11.4.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.3"
+  }
+}

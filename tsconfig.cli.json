@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "skipLibCheck": true,
+    "declaration": false,
+    "noEmit": false
+  },
+  "include": [
+    "src/cli.ts",
+    "src/server.ts",
+    "src/resolve-md.ts",
+    "src/command-suggest.ts",
+    "src/help.ts",
+    "src/session-store.ts",
+    "src/readthey-home.ts",
+    "src/git-root.ts",
+    "src/md-discover.ts",
+    "src/boot-service.ts"
+  ],
+  "exclude": ["src/viewer"]
+}

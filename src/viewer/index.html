@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>readthey</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <aside class="sidebar" aria-label="Library">
+      <div class="sidebar-head">
+     
+        <div class="search-block">
+          <input
+            type="search"
+            id="doc-search"
+            class="search-input"
+            placeholder="Search files & markdown…"
+            autocomplete="off"
+            aria-label="Search documents and markdown content"
+          />
+          <div class="search-options" role="group" aria-label="Search options">
+            <button type="button" id="search-case" class="search-toggle" aria-pressed="false" title="Match case (⌥C)">
+              Aa
+            </button>
+            <button type="button" id="search-regex" class="search-toggle" aria-pressed="false" title="Regular expression (⌥R)">
+              .*
+            </button>
+          </div>
+        </div>
+        <p id="search-error" class="search-error" hidden></p>
+        <input
+          type="text"
+          id="repo-typeahead"
+          class="typeahead-input"
+          placeholder="Repo filter"
+          list="repo-options"
+          aria-label="Filter by repository"
+        />
+        <datalist id="repo-options"></datalist>
+      </div>
+      <div class="sidebar-body">
+     
+        <p class="discover-hint" style="
+        padding-left: 12px;
+        margin-bottom: 0;
+        margin-top: 10px;
+    ">REPOSITORIES</p>
+        <div id="repo-tabs" class="repo-tabs" role="tablist" aria-label="Repositories"></div>
+        <ul id="doc-list" class="doc-list"></ul>
+      </div>
+      <footer class="sidebar-footer">
+        <p class="discover-hint">
+          If you added new <code>.md</code> links in this file, click below to register them in the library.
+        </p>
+        <button type="button" id="btn-discover" class="side-btn">Scan links in doc</button>
+      </footer>
+    </aside>
+    <div class="main-col">
+      <header class="chrome">
+        <div class="brand">
+          <span class="brand-mark">readthey</span>
+          <span class="brand-tag">markdown</span>
+        </div>
+        <div class="theme-row" role="toolbar" aria-label="Theme">
+          <button type="button" class="theme-btn" data-theme="paper" aria-pressed="true">Paper</button>
+          <button type="button" class="theme-btn" data-theme="midnight" aria-pressed="false">Midnight</button>
+          <button type="button" class="theme-btn" data-theme="sepia" aria-pressed="false">Sepia</button>
+          <button type="button" class="theme-btn" data-theme="signal" aria-pressed="false">Signal</button>
+        </div>
+      </header>
+      <main class="viewer-scroll" tabindex="-1">
+        <div class="sheet">
+          <div id="missing-banner" class="missing-banner" hidden></div>
+          <article id="content" class="prose"></article>
+          <p id="status" class="status" role="status"></p>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
