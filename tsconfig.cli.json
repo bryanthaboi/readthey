@@ -22,7 +22,8 @@
     "src/readthey-home.ts",
     "src/git-root.ts",
     "src/md-discover.ts",
-    "src/boot-service.ts"
+    "src/boot-service.ts",
+    "src/open-external.ts"
   ],
   "exclude": ["src/viewer"]
 }

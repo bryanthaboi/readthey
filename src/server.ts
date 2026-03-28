@@ -5,6 +5,7 @@ import { readFileSync, existsSync, statSync } from "node:fs";
 import { extractMdLinkHrefs, linkAnchorForFile, resolveAssetHref, resolveMdHref } from "./md-discover.js";
 import type { SessionDocument, SessionState, ThemeId } from "./session-store.js";
 import { SessionStore } from "./session-store.js";
+import { getOpenExternalButtonText, openPathWithSystemDefault } from "./open-external.js";
 
 export const READTHEY_HOST = "127.0.0.1";
 /** TCP max is 65535; 342069 is invalid — 34206 keeps the same digit run in-range. */
@@ -171,6 +172,11 @@ export function createReadtheyServer(viewerRoot: string, store: SessionStore): h
       return;
     }
 
+    if (url.pathname === "/api/open-external-hint" && req.method === "GET") {
+      json(res, 200, { label: getOpenExternalButtonText() });
+      return;
+    }
+
     if (url.pathname === "/api/session" && req.method === "GET") {
       store.rescanRepos();
       store.save();
@@ -262,6 +268,28 @@ export function createReadtheyServer(viewerRoot: string, store: SessionStore): h
         return;
       }
       json(res, 200, summarizeState(store.getState()));
+      return;
+    }
+
+    const openExtMatch = url.pathname.match(/^\/api\/documents\/([^/]+)\/open-external$/);
+    if (openExtMatch && req.method === "POST") {
+      const id = openExtMatch[1];
+      const d = store.getById(id);
+      if (!d) {
+        json(res, 404, { error: "Unknown document" });
+        return;
+      }
+      if (!existsSync(d.path) || !statSync(d.path).isFile()) {
+        json(res, 404, { error: "File not found" });
+        return;
+      }
+      try {
+        await openPathWithSystemDefault(d.path);
+        json(res, 200, { ok: true });
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "Failed to open";
+        json(res, 500, { error: msg });
+      }
       return;
     }
 

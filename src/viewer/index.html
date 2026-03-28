@@ -62,11 +62,18 @@
           <span class="brand-mark">readthey</span>
           <span class="brand-tag">markdown</span>
         </div>
-        <div class="theme-row" role="toolbar" aria-label="Theme">
-          <button type="button" class="theme-btn" data-theme="paper" aria-pressed="true">Paper</button>
-          <button type="button" class="theme-btn" data-theme="midnight" aria-pressed="false">Midnight</button>
-          <button type="button" class="theme-btn" data-theme="sepia" aria-pressed="false">Sepia</button>
-          <button type="button" class="theme-btn" data-theme="signal" aria-pressed="false">Signal</button>
+        <div class="chrome-trailing">
+          <div class="theme-row" role="toolbar" aria-label="Theme">
+            <button type="button" class="theme-btn" data-theme="paper" aria-pressed="true">Paper</button>
+            <button type="button" class="theme-btn" data-theme="midnight" aria-pressed="false">Midnight</button>
+            <button type="button" class="theme-btn" data-theme="sepia" aria-pressed="false">Sepia</button>
+            <button type="button" class="theme-btn" data-theme="signal" aria-pressed="false">Signal</button>
+          </div>
+          <div id="open-external-bar" class="open-external-bar" hidden>
+            <button type="button" id="btn-open-external" class="open-external-btn" aria-label="Open file in default application">
+              Open in editor
+            </button>
+          </div>
         </div>
       </header>
       <main class="viewer-scroll" tabindex="-1">

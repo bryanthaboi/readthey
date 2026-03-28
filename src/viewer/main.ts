@@ -24,6 +24,8 @@ interface SessionPayload {
 let sessionCache: SessionPayload | null = null;
 let currentDocPath = "";
 let currentDocId = "";
+/** File exists on disk and can be handed to the OS default app. */
+let openExternalAllowed = false;
 /** Set while `marked.parse` runs so the image renderer can build asset URLs. */
 let renderContextDocId = "";
 let selectedRepo: "all" | string = "all";
@@ -451,6 +453,46 @@ async function fetchSession(): Promise<SessionPayload> {
   const r = await fetch("/api/session", { cache: "no-store" });
   if (!r.ok) throw new Error(String(r.status));
   return (await r.json()) as SessionPayload;
+}
+
+async function loadOpenExternalHint(): Promise<void> {
+  try {
+    const r = await fetch("/api/open-external-hint", { cache: "no-store" });
+    if (!r.ok) return;
+    const j = (await r.json()) as { label?: string };
+    if (!j.label) return;
+    const btn = document.getElementById("btn-open-external");
+    if (btn) btn.textContent = j.label;
+  } catch {
+    /* ignore */
+  }
+}
+
+function syncOpenExternalBar(): void {
+  const bar = document.getElementById("open-external-bar");
+  if (!bar) return;
+  bar.hidden = !openExternalAllowed || !currentDocId;
+}
+
+async function openCurrentInExternalEditor(): Promise<void> {
+  if (!currentDocId || !openExternalAllowed) return;
+  const btn = document.getElementById("btn-open-external") as HTMLButtonElement | null;
+  btn?.setAttribute("aria-busy", "true");
+  try {
+    const r = await fetch(`/api/documents/${encodeURIComponent(currentDocId)}/open-external`, {
+      method: "POST",
+    });
+    if (!r.ok) {
+      const j = (await r.json().catch(() => ({}))) as { error?: string };
+      const status = document.getElementById("status");
+      if (status) status.textContent = j.error ?? `Could not open file (${r.status})`;
+    }
+  } catch {
+    const status = document.getElementById("status");
+    if (status) status.textContent = "Could not open file.";
+  } finally {
+    btn?.removeAttribute("aria-busy");
+  }
 }
 
 function repoGroups(docs: DocRef[]): { key: string; label: string }[] {
@@ -1004,6 +1046,8 @@ async function removeRef(id: string): Promise<void> {
     else {
       currentDocId = "";
       currentDocPath = "";
+      openExternalAllowed = false;
+      syncOpenExternalBar();
       const content = document.getElementById("content");
       if (content) content.innerHTML = "";
       const miss = document.getElementById("missing-banner");
@@ -1036,6 +1080,8 @@ async function selectDoc(id: string): Promise<void> {
   if (!content || !status) return;
 
   status.textContent = "Loading…";
+  openExternalAllowed = false;
+  syncOpenExternalBar();
   if (miss) {
     miss.hidden = true;
     miss.innerHTML = "";
@@ -1049,6 +1095,8 @@ async function selectDoc(id: string): Promise<void> {
 
   const r = await fetch(`/api/documents/${encodeURIComponent(id)}/content`, { cache: "no-store" });
   if (!r.ok) {
+    openExternalAllowed = false;
+    syncOpenExternalBar();
     status.textContent = String(r.status);
     return;
   }
@@ -1064,6 +1112,8 @@ async function selectDoc(id: string): Promise<void> {
   history.replaceState(null, "", `/?doc=${encodeURIComponent(id)}`);
 
   if (data.missing) {
+    openExternalAllowed = false;
+    syncOpenExternalBar();
     content.innerHTML = "";
     status.textContent = "";
     sessionCache = await fetchSession();
@@ -1076,6 +1126,9 @@ async function selectDoc(id: string): Promise<void> {
     await refreshUI();
     return;
   }
+
+  openExternalAllowed = true;
+  syncOpenExternalBar();
 
   renderContextDocId = id;
   try {
@@ -1156,6 +1209,7 @@ function wireThemes(): void {
 async function boot(): Promise<void> {
   const status = document.getElementById("status");
   try {
+    await loadOpenExternalHint();
     sessionCache = await fetchSession();
     const serverTheme = sessionCache.theme;
     if (serverTheme && (THEMES as readonly string[]).includes(serverTheme)) {
@@ -1246,6 +1300,7 @@ async function boot(): Promise<void> {
     });
 
     wireThemes();
+    document.getElementById("btn-open-external")?.addEventListener("click", () => void openCurrentInExternalEditor());
     wireMermaidFullscreenDelegation();
     document.addEventListener("fullscreenchange", () => {
       if (document.fullscreenElement) return;

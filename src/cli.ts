@@ -31,6 +31,17 @@ function viewerRoot(): string {
   return path.join(__dirname, "viewer");
 }
 
+function assertViewerBundlePresent(): void {
+  const indexHtml = path.join(viewerRoot(), "index.html");
+  if (existsSync(indexHtml)) return;
+  console.error(
+    "\x1b[31mreadthey viewer is missing (no dist/viewer/index.html next to this CLI).\x1b[0m\n" +
+      "\x1b[2mFrom the readthey repo run:\x1b[0m  pnpm install && pnpm run build\n" +
+      "\x1b[2mThen restart:\x1b[0m            readthey stop  &&  readthey …",
+  );
+  process.exit(1);
+}
+
 async function ping(): Promise<boolean> {
   try {
     const ac = new AbortController();
@@ -97,6 +108,7 @@ async function registerDocumentAndOpen(absPath: string): Promise<void> {
 }
 
 async function runDaemon(): Promise<void> {
+  assertViewerBundlePresent();
   const store = new SessionStore();
   const server = createReadtheyServer(viewerRoot(), store);
   try {

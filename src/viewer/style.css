@@ -431,6 +431,14 @@ body {
   backdrop-filter: blur(8px);
 }
 
+.chrome-trailing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem 1rem;
+}
+
 .brand {
   display: flex;
   align-items: baseline;
@@ -487,6 +495,40 @@ body {
   padding: 2rem 1.25rem 4rem;
   width: 100%;
   box-sizing: border-box;
+}
+
+.open-external-bar {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.open-external-bar[hidden] {
+  display: none !important;
+}
+
+.open-external-btn {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.32rem 0.55rem;
+  border: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--bg) 88%, var(--fg));
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+}
+
+.open-external-btn:hover {
+  color: var(--fg);
+  background: color-mix(in srgb, var(--bg) 70%, var(--fg));
+}
+
+.open-external-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .missing-banner {
