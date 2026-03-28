@@ -1,6 +1,6 @@
 {
   "name": "readthey",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Lightweight Markdown viewer with Mermaid — opens in your browser.",
   "packageManager": "pnpm@10.31.0",
   "type": "module",
