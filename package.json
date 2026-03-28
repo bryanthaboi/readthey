@@ -19,7 +19,8 @@
     "build:viewer": "vite build",
     "build:cli": "tsc -p tsconfig.cli.json && node scripts/copy-assets.mjs",
     "build": "pnpm run build:viewer && pnpm run build:cli",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "publish": "pnpm run build && pnpm publish --access public --no-git-checks"
   },
   "keywords": [
     "markdown",
